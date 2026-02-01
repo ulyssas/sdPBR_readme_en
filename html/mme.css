@@ -1,0 +1,137 @@
+﻿/* 2017-04より使用、Meiryo, フォントサイズ中, 白ベース 背景なし */
+
+b {font-family:Meiryo; font-weight:bold; font-size:middle}
+
+/* それともLicida ? */
+address {font-family:Menlo, Lucida Console,MS UI Gothic; font-style:normal; font-weight:normal; font-size:1em}
+em      {font-family:Menlo, Lucida Console,MS UI Gothic; font-style:normal; font-weight:normal; font-size:1em}
+
+
+/* 左右にインデント */
+/* p  {padding-left:24px; padding-right:24px} */
+
+/* 見出し */
+h1 {font-weight:normal; font-size:x-large; color:#808080; font-family:Menlo, Lucida Console, Meiryo,MS UI Gothic}
+h1.titleA {font-size: large; text-decoration: underline; color:#444455; font-family:LucidaGrande, Meiryo, MS UI Gothic; padding-top: 24px; padding-bottom: 24px}
+h2 {margin-left:2.5%; margin-right:2.5%; margin-top:32px; background-color:#bbc1c8; font-weight:normal}
+h3 {padding-left:5%; padding-right:5%; color:#dd8060}
+h4 {padding-left:5%; padding-right:5%}
+
+/* リンク */
+A:link    { text-decoration:underline; color:#479557 }
+A:visited { text-decoration:underline; color:#455795 }
+A:active  { text-decoration:underline; color:#47c757}
+A:hover   { text-decoration:none; color:#97b7a7}
+
+/* インデントとか(独り言固有) */
+body {
+    background-repeat:repeat-y;
+    background-color:#dde3ec;
+    color:#444455;
+    line-height:150%;
+    font-family:LucidaGrande, Meiryo, MS UI Gothic;
+    font-size:100%;
+    padding-left:5%; padding-right:5%;
+}
+div {line-height:180%}
+p {line-height:180%; text-indent: 1em}
+ul {line-height:180%}
+ol {line-height:180%}
+li {line-height:180%}
+table {line-height:150%; margin-left:5%; margin-right:5%}
+
+
+/* その他 */
+pre {font-family:menlo; font-size:100%; background:#ccd0c6; margin-left:5%; margin-right:5%; padding:16px 24px 16px 24px}
+hr {color:#808090; background-color:#a0a0b0; width:75%; height:2px; border:2px; border-style:dotted}
+
+
+/* 画像用 */
+a img {
+  border-style:none;
+}
+.shadowimg {
+    box-shadow: 0 6px 25px 8px #999999;
+    -moz-box-shadow: 0 6px 25px 8px #999999;
+    -webkit-box-shadow: 0 6px 25px 8px #999999;
+    margin: 15px 35px 40px;
+}
+
+.roundimg_s{
+  border-radius: 11px 11px 11px 11px;
+  -moz-border-radius: 11px 11px 11px 11px;
+  -webkit-border-radius: 11px 11px 11px 11px;
+  box-shadow: 1px 4px 6px 1px #999999;
+  -moz-box-shadow: 1px 4px 6px 1px #999999;
+  -webkit-box-shadow: 1px 4px 6px 1px #999999;
+  margin: -5px 15px 1px 5px;
+}
+
+.roundimg {
+	border-radius: 25px 25px 25px 25px;
+	-moz-border-radius: 25px 25px 25px 25px;
+	-webkit-border-radius: 25px 25px 25px 25px;
+	box-shadow: 1px 4px 6px 1px #999999;
+	-moz-box-shadow: 1px 4px 6px 1px #999999;
+	-webkit-box-shadow: 1px 4px 6px 1px #999999;
+	margin: -5px 15px 1px 5px;
+}
+
+.thumb {
+	height: 144px;
+	border-radius: 25px 25px 25px 25px;
+	-moz-border-radius: 25px 25px 25px 25px;
+	-webkit-border-radius: 25px 25px 25px 25px;
+	box-shadow: 1px 4px 6px 1px #999999;
+	-moz-box-shadow: 1px 4px 6px 1px #999999;
+	-webkit-box-shadow: 1px 4px 6px 1px #999999;
+	margin: -5px 15px 1px 5px;
+}
+
+.roundborder {
+ padding: 10px;
+  border-radius: 10px 10px 10px 10px;
+ -webkit-border-radius: 10px;	/* Safari、Google Chrome */
+ -moz-border-radius: 10px;	/* Firefox */
+ background-color:rgba(255,255,255,0.5);
+}
+
+
+/* 詳細段落用 */
+.hidden_div .hidden_before {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+/*クリックで中身表示*/
+.hidden_div input:checked ~ .hidden_before {
+    padding-left:5%; padding-right:5%;
+    padding: 10px 0;
+    height: auto;
+    opacity: 1;
+}
+
+/* 中央寄せテーブル */
+.tabcenter {margin: auto;}
+
+
+
+/* 書式いろいろ */
+/* 作品名を強調 */
+.t {color:green}
+/* 固有名詞強調 */
+.s {color:royalblue}
+/* ポジティブな強調 */
+.p {color:coral}
+/* ネガティブな強調 */
+.n {color:red}
+/* AA張り用 */
+.AA {font-family: ＭＳ Ｐゴシック,YukarryAA; font-size:12pt; line-height:110%}
+/* エフェクトサムネイル説明用 */
+.d {font-size:x-small}
+/* エフェクト説明用 */
+.de {font-size:small}
+

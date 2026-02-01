@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="ja">
+<meta charset="utf-8">
+<meta name="Description" content="MikuMikuEffect">
+<meta name="KeyWords"  content="MikuMikuEffect MMD MME MikuMikuDance HLSL">
+<title>sdPBRチュートリアル集</title>
+<link  rel="stylesheet"  type="text/css"  href="mme.css">
+</head>
+
+<body>
+
+<h1>sdPBRチュートリアル集</h1>
+
+<p>
+sdPBRの色んな使い方について順を追って(?)説明した記事集です
+</p>
+
+<table cellpadding=16>
+<tr>
+  <td><img src="g/dekita.jpg" width=256 class="roundimg_s">
+  <td><a href="basic.html">基本的な使い方</a><br>最初の設定からライトの使い方まで。まずはこちらからどうぞ
+</tr>
+<tr>
+  <td><img src="g/cross_on.jpg" width=256 class="roundimg_s">
+  <td><a href="posteffect.html">付属のポストエフェクトについて</a><br>半必須な物から必要に応じてな物まで、今では大分増えたポストエフェクトについて
+</tr>
+<tr>
+  <td><img src="g/material.jpg" width=256 class="roundimg_s">
+  <td><a href="material.html">マテリアルの作り方</a><br>オリジナルの質感を探すには必須？楽しいですよ！
+</tr>
+<tr>
+  <td><img src="g/materi6.jpg" width=256 class="roundimg_s">
+  <td><a href="materialImporter.html">マテリアルの取り込み方</a><br>cc0textures.com等で公開されているPBRマテリアルや<br>AdobeCaptureで作ったマテリアルを変換して使えます
+</tr>
+<tr>
+  <td><img src="g/yasu.jpg" width=256 class="roundimg_s">
+  <td><a href="ies.html">ライトのくわしい使い方</a><br>犯人はヤス
+</tr>
+<tr>
+  <td><img src="g/uchuudayo.jpg" width=256 class="roundimg_s">
+  <td><a href="skybox_usage.html">読むとトクするskyboxの使い方</a><br>skyboxはライティングの半分？それ以上かもしれません！
+</tr>
+<tr>
+  <td><img src="g/jimoto.jpg" width=256 class="roundimg_s">
+  <td><a href="skybox.html">skyboxの作り方</a><br>背景にこだわりを！意外と凄い効果があります。<br>テカり方がヌルヌルして不自然な感じになる理由と対策についても書いてあります。
+</tr>
+<tr>
+  <td><img src="g/ilu_koyukoto.jpg" width=256 class="roundimg_s">
+  <td><a href="illuminanceMeter.html">照度計の使い方</a><br>直射日光や強いライト入りのHDR画像から使いやすいskyboxを作る方法
+</tr>
+<tr>
+  <td><img src="g/kyodaidayo.jpg" width=256 class="roundimg_s">
+  <td><a href="vs.html">VertexShaderエフェクトの使い方</a><br>VertexShaderを巻き込んだエフェクトの使い方です
+</tr>
+<tr>
+  <td><img src="g/StageSet.jpg" width=256 class="roundimg_s">
+  <td><a href="stageSet.html">舞台装置の使い方</a><br>軽くて楽しいMV作成の味方、舞台装置エフェクトについて
+</tr>
+<tr>
+  <td><img src="g/pref1.jpg" width=256 class="roundimg_s">
+  <td><a href="planarReflection.html">sdPlanarReflectionの使い方</a><br>みんな大好き！針金P氏作WorkingFloorを元に、sdPBR用の平面映り込みエフェクトを作りました
+</tr>
+<tr>
+  <td><img src="g/shadow1.jpg" width=256 class="roundimg_s">
+  <td><a href="shadow.html">キレイな影を作る</a><br>調整すれば影はさらに綺麗になります！
+</tr>
+<tr>
+  <td><img src="g/cinema2.jpg" width=256 class="roundimg_s">
+  <td><a href="cinematic.html">シネマティックな表現のために</a><br>アナモルフィックレンズで映画監督気分！
+</tr>
+<tr>
+  <td><img src="g/fluid3D1.jpg" width=256 class="roundimg_s">
+  <td><a href="fluid3D.html">3D流体シミュレータの使い方</a><br>過度な期待はなさらぬよう
+</tr>
+<tr>
+  <td><img src="g/flowParticle.jpg" width=256 class="roundimg_s">
+  <td><a href="flowParticle.html">フローパーティクルの使い方</a><br>ちょっと複雑な動きの出来るパーティクルシステムです
+</tr>
+<tr>
+  <td><img src="g/fluidBoard.jpg" width=256 class="roundimg_s">
+  <td><a href="fluidBoard.html">2.5D流体ビルボードの使い方</a><br>わりと軽い流体シミュの使い方
+</tr>
+<tr>
+  <td><img src="g/ocean.jpg" width=256 class="roundimg_s">
+  <td><a href="ocean.html">大洋エフェクトの使い方</a><br>中～遠景用の海を作るエフェクトです
+</tr>
+<tr>
+  <td><img src="g/contactParticle.jpg" width=256 class="roundimg_s">
+  <td><a href="contactParticle.html">コンタクトパーティクルの使い方</a><br>アクションMMDのお供、火花を散らすエフェクトです
+</tr>
+<tr>
+  <td><img src="g/www.jpg" width=256 class="roundimg_s">
+  <td><a href="www.html">草の生やし方www</a><br>リアルで草www
+</tr>
+<tr>
+  <td><img src="g/fluidSmoke.jpg" width=256 class="roundimg_s">
+  <td><a href="fluidSmoke.html">3D流体煙エフェクトの使い方</a><br>モコモコした煙を作ろう
+</tr>
+
+</body>
+</html>

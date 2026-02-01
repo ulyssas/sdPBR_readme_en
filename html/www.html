@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="ja">
+<meta charset="utf-8">
+<meta name="Description" content="MikuMikuEffect">
+<meta name="KeyWords"  content="MikuMikuEffect MMD MME MikuMikuDance HLSL">
+<title>sdPBR 草エフェクトについて</title>
+<link  rel="stylesheet"  type="text/css"  href="mme.css">
+</head>
+
+<body>
+
+<h1>草エフェクトの使い方</h1>
+
+<p>
+Version 4.60から新しい舞台装置エフェクトとしてKusaが追加されました。StageSet/Kusaフォルダに入っています。sdPBR専用のエフェクトで、sdPBR.pmxとsdPBRGBuffer.xがMMDに既にドロップされている事を前提に動作します。
+</p>
+
+<h2>草生えるwww</h2>
+<p align="center">
+    <a href="g/www.jpg"><img class="roundimg_s" width="320" src="g/www.jpg"></a><br>
+    <font class="de">すず様作 ミクダヨーさん をお借りしました</font>
+</p>
+<p>風になびく芝生や草原を作ることが出来ます。本数少なめで軽いw.pmxと、本数が多く重いwww.pmxを用意してあります。生やしたい範囲やPCの性能などに併せて好きな方をどうぞ。おそらく静止画に出力すると草が完全に立った状態にしかならないので、<b>動画専用</b>です。</p>
+
+<h2>使い方</h2>
+<p>MMDへw.pmxまたはwww.pmxをドロップした後、www.vmdファイルをドロップするとお薦め設定が読み込まれて画面に草原が表示されます。見た目のカスタマイズの例としては以下のような事が出来ます</p>
+<ul>
+    <li>センターボーンで草地の中心・向きを指定できます</li>
+    <li><b>範囲</b>モーフで草地の広さを指定できます</li>
+    <li><b>高さ/太さ</b>モーフで草の長さ/幅を指定できます</li>
+    <li><b>硬さ</b>モーフを低くすると風によって根元から倒れやすくなり、高くすると先端のみが折れるように倒れます</li>
+    <li><b>ドヨドヨ度/ザワザワ度</b>モーフによって草に当たる風の雰囲気を変えられます</li>
+    <li>草の色は<b>H/S/V</b>モーフで変えられます</li>
+</ul>
+<p>collidersフォルダに入っているkusaO*.xファイルをドロップすると草地を押しのける球状の当たり判定を置くことが出来ます。球の半径はSiモーフで変えられます。</p>
+
+<h2>正しいシェーディングの仕方</h2>
+<p>w.pmxおよびwww.vmdをドロップしただけの状態ではシャドウマップやSSAOが正しく設定されてません。ちょっと面倒なんですけど、さらに設定をする必要が有ります。<b>MMEffect-エフェクト割り当て</b>ダイアログを開いてw.pmx(またはwww.pmx)に対して以下の設定を行ってください</p>
+<ol>
+    <li>sdPBR_Depthタブで_map_www_depth.fxを割り当てる</li>
+    <li>sdPBR_SD0～3タブでそれぞれ_map_www_OrthoShadow0～3.fxを割り当てる</li>
+    <li>sdSSDOタブで_map_www_normal.fxを割り当てる</li>
+    <li>追加ライトを付けている場合は、追加ライトに対応するタブで_map_www_ShadowMap.fxを割り当てる</li>
+    <li>sdPlanarReflectionと併用する場合は、sdPRefタブで_map_www_WorkingFloor.fxを割り当てる</li>
+</ol>
+
+<h2>ポストエフェクトとの連携の際に</h2>
+<p>デフォルトの設定では他のポストエフェクトなどから草の位置が正確にとれません。このため、DoFなどが正しく掛からなくなります。これを防ぐためには、DoFエフェクトのタブでocean.pmxに対して、_map_www_depth.fxを指定してください。</p>
+
+<h2>地形に合わせた高さに草を生やす</h2>
+<p>デフォルトの設定では草の高さはセンターボーンの高さに揃って生えるので凹凸のある背景モデルでは使いづらく感じるかもしれません。そうした場合は、MMEffectダイアログに<b>wwwY</b>というタブが追加されているので、そのタブを選択してモデル毎に割り当てられている_Y_www_thru.fxを以下の中から選択して変更してください</p>
+<table border=0 cellpadding=16>
+    <tr>
+        <td nowrap>_Y_www_here.fx</td>
+        <td>モデルの上の面の高さに沿うように草を生やします</td>
+    </tr>
+    <tr>
+        <td nowrap>_Y_www_zero.fx</td>
+        <td>このモデルが一番上(Y座標値が一番大きい)の場合、w.pmxのセンターボーンのY座標に有った位置に草を生やします</td>
+    </tr>
+    <tr>
+        <td nowrap>_Y_www_none.fx</td>
+        <td>このモデルが一番上(Y座標値が一番大きい)の場合、草が生えません</td>
+    </tr>
+    <tr>
+        <td nowrap>_Y_www_thru.fx</td>
+        <td>このモデルは草の生える高さの決定に影響を与えません</td>
+    </tr>
+</table>
+
+<h2>草をおしのける障害物を追加する</h2>
+<p>collidersフォルダ内にkusaO0～7.xというアクセサリがあるので、それをドロップするとアクセサリの周囲の草が倒れるようになります。Siパラメータで障害物の大きさを指定できます。Si=1の時、半径10MMD距離になります。</p>
+<p>障害物が草の付け根と重なっている場合におしのける効果が出るので、地面にめり込ませる感じで球体を配置しないと思ったような効果が出ないと思います。踊っているモデルの場合は両足ボーンにSi=0.5～1程度の大きめのサイズにしてくっつけると分かりやすいと思います。</p>
+<p>障害物の有効範囲は同じくcollidersフォルダ内のwwwDisplay.xをドロップすると白い球体として表示されるようになります。Trパラメータで不透明度を指定できるので活用してください。</p>
+
+<h2>草を部分的に生やさなくする</h2>
+<p>wwwmask.pngというテクスチャを編集すると、ピクセルが黒い所は草が生えなくなり、白い所にだけ草が生えるようになります。グレーにすると小ぶりの草が生えます。同梱のwwwmask.pngは全部白が描き込まれており、まんべんなく草が生えます。</p>
+
+<h2>設定できる項目</h2>
+<h4>ボーン一覧</h4>
+<table border=0 cellpadding=16>
+    <tr>
+        <td nowrap>センター</td>
+        <td>草地の中心を指定します</td>
+    </tr>
+</table>
+<h4>モーフ一覧</h4>
+<table border=0 cellpadding=16>
+    <tr>
+        <td colspan=2><b> [左上] : 草の形状・配置の設定</b></td>
+    </tr>
+    <tr>
+        <td nowrap>範囲</td>
+        <td>草地の範囲を狭く/広くします</td>
+    </tr>
+    <tr>
+        <td nowrap>高さ</td>
+        <td>草1本ずつの長さを指定します</td>
+    </tr>
+    <tr>
+        <td nowrap>太さ</td>
+        <td>草1本ずつの幅を指定します</td>
+    </tr>
+    <tr>
+        <td nowrap>硬さ</td>
+        <td>モーフの値が低いと柔らかい草になり、風を受けると根元から倒れやすくなります。モーフの値が高い時は硬い感じになり、先端だけが折れるようになります</td>
+    </tr>
+    <tr>
+        <td nowrap>円形配置</td>
+        <td>モーフが0の時は正方形の範囲に配置され、1の時は円形の範囲に配置されます</b></td>
+    </tr>
+
+    <tr>
+        <td colspan=2><b> [右上] : 風の設定</b></td>
+    </tr>
+    <tr>
+        <td nowrap>ドヨドヨ度</td>
+        <td>周期と向きのはっきりした層流が主体の風が吹くようになります</td>
+    </tr>
+    <tr>
+        <td nowrap>ザワザワ度</td>
+        <td>個々の草がバラバラに動くようにまばらな風が吹くようになります</td>
+    </tr>
+    <tr>
+        <td nowrap>風向き</td>
+        <td>風の吹く全体的な方向を指定します。モーフを0から1に上げると一回転し、モーフの値が0の時と1の時では見た目が同じになります</td>
+    </tr>
+
+    <tr>
+        <td colspan=2><b> [左下] : 草の色についての設定</b></td>
+    </tr>
+    <tr>
+        <td nowrap>H/S/V</td>
+        <td>草の色相/彩度/明度を指定します</td>
+    </tr>
+    <tr>
+        <td nowrap>±H</td>
+        <td>草ごとの色相の変化を指定します</td>
+    </tr>
+    <tr>
+        <td nowrap>明るく</td>
+        <td>草をより明るく表示します</td>
+    </tr>
+
+    <tr>
+        <td colspan=2><b> [右下] : その他の設定</b></td>
+    </tr>
+    <tr>
+        <td nowrap>テストモード</td>
+        <td>草が受けている風向きを色で表示します。X成分が赤、Z成分を緑としています。</td>
+    </tr>
+
+</table>
+
+</body>
+</html>
