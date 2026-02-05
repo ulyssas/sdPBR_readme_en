@@ -4,98 +4,98 @@
 <meta charset="utf-8">
 <meta name="Description" content="MikuMikuEffect">
 <meta name="KeyWords"  content="MikuMikuEffect MMD MME MikuMikuDance HLSL">
-<title>sdPBRチュートリアル集</title>
+<title>sdPBR Tutorials</title>
 <link  rel="stylesheet"  type="text/css"  href="mme.css">
 </head>
 
 <body>
 
-<h1>sdPBRチュートリアル集</h1>
+<h1>sdPBR Tutorials</h1>
 
 <p>
-sdPBRの色んな使い方について順を追って(?)説明した記事集です
+Here you'll find articles that guide you through various ways to use sdPBR features.
 </p>
 
 <table cellpadding=16>
 <tr>
   <td><img src="g/dekita.jpg" width=256 class="roundimg_s">
-  <td><a href="basic.html">基本的な使い方</a><br>最初の設定からライトの使い方まで。まずはこちらからどうぞ
+  <td><a href="basic.html">Basic usage</a><br>From initial setup to using lights. This is a good place to start.
 </tr>
 <tr>
   <td><img src="g/cross_on.jpg" width=256 class="roundimg_s">
-  <td><a href="posteffect.html">付属のポストエフェクトについて</a><br>半必須な物から必要に応じてな物まで、今では大分増えたポストエフェクトについて
+  <td><a href="posteffect.html">About included posteffects</a><br>From almost essential to as needed: an ever-growing collection of posteffects
 </tr>
 <tr>
   <td><img src="g/material.jpg" width=256 class="roundimg_s">
-  <td><a href="material.html">マテリアルの作り方</a><br>オリジナルの質感を探すには必須？楽しいですよ！
+  <td><a href="material.html">How to make materials</a><br>Essential for finding original texture? It's fun!
 </tr>
 <tr>
   <td><img src="g/materi6.jpg" width=256 class="roundimg_s">
-  <td><a href="materialImporter.html">マテリアルの取り込み方</a><br>cc0textures.com等で公開されているPBRマテリアルや<br>AdobeCaptureで作ったマテリアルを変換して使えます
+  <td><a href="materialImporter.html">How to import materials</a><br>You can convert PBR materials from cc0textures.com or<br>materials from AdobeCapture
 </tr>
 <tr>
   <td><img src="g/yasu.jpg" width=256 class="roundimg_s">
-  <td><a href="ies.html">ライトのくわしい使い方</a><br>犯人はヤス
+  <td><a href="ies.html">Deep dive into using lights</a><br>Yasu is the culprit
 </tr>
 <tr>
   <td><img src="g/uchuudayo.jpg" width=256 class="roundimg_s">
-  <td><a href="skybox_usage.html">読むとトクするskyboxの使い方</a><br>skyboxはライティングの半分？それ以上かもしれません！
+  <td><a href="skybox_usage.html">Helpful tips for using skybox</a><br>Half of the lighting comes from skybox? Maybe it's more than that!
 </tr>
 <tr>
   <td><img src="g/jimoto.jpg" width=256 class="roundimg_s">
-  <td><a href="skybox.html">skyboxの作り方</a><br>背景にこだわりを！意外と凄い効果があります。<br>テカり方がヌルヌルして不自然な感じになる理由と対策についても書いてあります。
+  <td><a href="skybox.html">How to make skybox</a><br>Pay more attention to backgrounds! They can have surprisingly good effects.<br>It also explains the cause of unnatural oiliness and how to deal with it.
 </tr>
 <tr>
   <td><img src="g/ilu_koyukoto.jpg" width=256 class="roundimg_s">
-  <td><a href="illuminanceMeter.html">照度計の使い方</a><br>直射日光や強いライト入りのHDR画像から使いやすいskyboxを作る方法
+  <td><a href="illuminanceMeter.html">How to use illuminance meter</a><br>How to create easy-to-use skybox from HDR images with direct sunlight or bright lights
 </tr>
 <tr>
   <td><img src="g/kyodaidayo.jpg" width=256 class="roundimg_s">
-  <td><a href="vs.html">VertexShaderエフェクトの使い方</a><br>VertexShaderを巻き込んだエフェクトの使い方です
+  <td><a href="vs.html">How to use VertexShader effects</a><br>How to use effects involving VertexShader
 </tr>
 <tr>
   <td><img src="g/StageSet.jpg" width=256 class="roundimg_s">
-  <td><a href="stageSet.html">舞台装置の使い方</a><br>軽くて楽しいMV作成の味方、舞台装置エフェクトについて
+  <td><a href="stageSet.html">How to use stage setting</a><br>A light and fun MV making supporter, the stage setting effect
 </tr>
 <tr>
   <td><img src="g/pref1.jpg" width=256 class="roundimg_s">
-  <td><a href="planarReflection.html">sdPlanarReflectionの使い方</a><br>みんな大好き！針金P氏作WorkingFloorを元に、sdPBR用の平面映り込みエフェクトを作りました
+  <td><a href="planarReflection.html">How to use sdPlanarReflection</a><br>Eveyone's favorite! I made a planar reflection effect for sdPBR based on Harigane-P's WorkingFloor.
 </tr>
 <tr>
   <td><img src="g/shadow1.jpg" width=256 class="roundimg_s">
-  <td><a href="shadow.html">キレイな影を作る</a><br>調整すれば影はさらに綺麗になります！
+  <td><a href="shadow.html">How to make beautiful shadow</a><br>You can make shadows more beautiful with some adjustments!
 </tr>
 <tr>
   <td><img src="g/cinema2.jpg" width=256 class="roundimg_s">
-  <td><a href="cinematic.html">シネマティックな表現のために</a><br>アナモルフィックレンズで映画監督気分！
+  <td><a href="cinematic.html">For cinematic looks</a><br>Get a taste of film director with anamorphic lens!
 </tr>
 <tr>
   <td><img src="g/fluid3D1.jpg" width=256 class="roundimg_s">
-  <td><a href="fluid3D.html">3D流体シミュレータの使い方</a><br>過度な期待はなさらぬよう
+  <td><a href="fluid3D.html">How to use 3D fluid simulation</a><br>Please don't expect too much.
 </tr>
 <tr>
   <td><img src="g/flowParticle.jpg" width=256 class="roundimg_s">
-  <td><a href="flowParticle.html">フローパーティクルの使い方</a><br>ちょっと複雑な動きの出来るパーティクルシステムです
+  <td><a href="flowParticle.html">How to use flow particle</a><br>Particle system that can do a bit more complicated movement.
 </tr>
 <tr>
   <td><img src="g/fluidBoard.jpg" width=256 class="roundimg_s">
-  <td><a href="fluidBoard.html">2.5D流体ビルボードの使い方</a><br>わりと軽い流体シミュの使い方
+  <td><a href="fluidBoard.html">How to use 2.5D fluid billboard</a><br>How to use fairly light weight fluid simulation
 </tr>
 <tr>
   <td><img src="g/ocean.jpg" width=256 class="roundimg_s">
-  <td><a href="ocean.html">大洋エフェクトの使い方</a><br>中～遠景用の海を作るエフェクトです
+  <td><a href="ocean.html">How to use ocean effect</a><br>Ocean effect for middle to distant view
 </tr>
 <tr>
   <td><img src="g/contactParticle.jpg" width=256 class="roundimg_s">
-  <td><a href="contactParticle.html">コンタクトパーティクルの使い方</a><br>アクションMMDのお供、火花を散らすエフェクトです
+  <td><a href="contactParticle.html">How to use contact particle</a><br>Spark effect that goes well with action MMD
 </tr>
 <tr>
   <td><img src="g/www.jpg" width=256 class="roundimg_s">
-  <td><a href="www.html">草の生やし方www</a><br>リアルで草www
+  <td><a href="www.html">How to grow grass</a><br>It's so realistic, you'll want to touch it!
 </tr>
 <tr>
   <td><img src="g/fluidSmoke.jpg" width=256 class="roundimg_s">
-  <td><a href="fluidSmoke.html">3D流体煙エフェクトの使い方</a><br>モコモコした煙を作ろう
+  <td><a href="fluidSmoke.html">How to use 3D fluid smoke effect</a><br>Let's make puffy smoke
 </tr>
 
 </body>
