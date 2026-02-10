@@ -4,167 +4,167 @@
 <meta charset="utf-8">
 <meta name="Description" content="MikuMikuEffect">
 <meta name="KeyWords"  content="MikuMikuEffect MMD MME MikuMikuDance HLSL">
-<title>sdPBR使い方ガイド</title>
+<title>sdPBR usage guide</title>
 <link  rel="stylesheet"  type="text/css"  href="mme.css">
 </head>
 
 <body>
 
-<h1>sdPBR使い方ガイド</h1>
+<h1>sdPBR usage guide</h1>
 
-<p>sdPBRの簡単な使い方についてステップバイステップで説明します。MikuMikuEffect(MME)のインストールしてあるMMDと、そこそこ早いGPUを積んだPCを用意してお読みください！</p>
+<p>I will walk you through how to use sdPBR step by step. Before you continue, make sure you have MMD with MikuMikuEffect (MME) installed, and PC with reasonably powerful GPU!</p>
 
 
-<h2>MMDの起動とモデルの読み込み</h2>
+<h2>MMD startup and loading models</h2>
 
-<p>まずはいつも通り、MMDを起動しましょう。そして、モデルを読み込みます。そして僕にとってはこれもいつも通り、(｀・ω・)様作 天龍改二ちゃんにお手伝いいただきましょう。</p>
-<p><font size=+2><a href="https://3d.nicovideo.jp/works/td62725">ニコニ立体</a></font>で公開されています！</p>
+<p>First, open MMD as usual and load a model. For this tutorial, I'll be using Tenryuu Kai Ni by (｀・ω・).</p>
+<p>You can download her from <font size=+2><a href="https://3d.nicovideo.jp/works/td62725">NicoNico Solid!</a></font></p>
 
 <p align="center">
 <a href="g/tenryu.jpg"><img src="g/tenryu.jpg" width=320 class="roundimg_s"></a>
 </p>
 
-<p>もちろん、あなたのお気に入りのモデルでも適宜読み替えていただければ構いません</p>
+<p>Of course, feel free to replace her with your favorite model.</p>
 
 
-<h2>基本的な使い方</h2>
+<h2>Basic usage</h2>
 
-<h3>1.sdPBRを読み込む</h3>
-<p>次に、sdPBRを読み込みます。配布アーカイブに入っているsdPBR.pmxをMMDへドロップしてください。</p>
-<p>読みこみにちょっと時間がかかるかもしれませんがここで「長い！」と思う場合は使わない方がいいかもしれません…理由はすぐあとで分かります</p>
+<h3>1. load sdPBR</h3>
+<p>Next, we will load sdPBR. Drag and drop sdPBR.pmx included in the distribution archive to MMD.</p>
+<p>It might take a while to load. If it takes too long to load, it might be better to not use sdPBR (you'll see why soon).</p>
 
 <p align="center">
 <a href="g/tenryu_pbr.jpg"><img src="g/tenryu_pbr.jpg" width=320 class="roundimg_s"></a>
 </p>
 
-<p>背景が黒くなりました。まだ見た目に変化はほぼないです</p>
+<p>The background is black now. It doesn't look that different for now.</p>
 
-<h3>2.sdPBRGBuffer.xを読み込む</h3>
-<p>sdPBRGBuffer.xを読み込みます。これはGBufferと言って後で説明するスポットライトなどの<b>追加ライト</b>へsdPBRのマテリアルについての情報を渡すための仕事をするヤツです。これ自体は見た目上は何も画面に影響しないんですが、とりあえずアクセサリ設定で表示順を一番上に設定してください。(仮に一番下にするとどうなるかというと、ポストエフェクトがスポットライトの当たっていない状態を基準に掛かるようになります)</p>
-<p><font size="-1">ホントはさっきのsdPBR.pmxに内蔵したかったんですがGeForceで上手く動かないので仕方なく分離することになりました</font></p>
+<h3>2. load sdPBRGBuffer.x</h3>
+<p>We'll load sdPBRGBuffer.x. This is called GBuffer, and it handles passing sdPBR material information to <b>additional lights</b> like spotlights, which I'll explain later. It doesn't affect the view on its own, but you should set it the highest in the draw order anyway from accessories edit. (if it's at the bottom, posteffects will not take spotlights into account.)</p>
+<p><font size="-1">I wanted to include GBuffer to sdPBR.pmx, but it didn't work well on GeForce so I had to split them apart.</font></p>
 
-<h3>3.マテリアルの設定</h3>
-<p>次に、sdPBRのエフェクトを天龍ちゃんに割り当てましょう</p>
+<h3>3. material setting</h3>
+<p>Next, we'll apply sdPBR effect to Tenryu-chan.</p>
 
 <p align="center">
 <a href="g/mmedialog.png"><img src="g/mmedialog.png" width=320 class="roundimg_s"></a>
 </p>
 
-<p>MMDの画面右上の「MMEffect」メニューから「エフェクトファイル割り当て」ダイアログを出して、「天龍改二.pmx」にmaterial\bodyフォルダにある「sdPBR_skinEx.fx」を割り当ててみましょう</p>
+<p>Open "Map Effect File" dialog from the "MMEffect" menu in the top right corner of MMD, then apply "sdPBR_skinEx.fx" in material\body folder to "天龍改二.pmx".</p>
 
 <p align="center">
 <a href="g/kowaiten.png"><img src="g/kowaiten.png" width=320 class="roundimg_s"></a>
 </p>
 
-<h3>4.skyboxの読み込み</h3>
-<p>ちょっと怖い感じになってしまいました。光の当たってない所が真っ黒けだから怖い感じになります。</p>
-<p>直接光が当たっていない所に光を届けるのが環境光というやつで、それと映り込みを再現する反射マップを賄うためにsdPBRではskyboxというモノを使います</p>
-<p>skyboxフォルダにあるskybox.xを読み込んでください</p>
+<h3>4. loading skybox</h3>
+<p>That looks a bit scary. This is because if lights aren't illuminating, that part becomes completely dark.</p>
+<p>Ambient light illuminates areas that direct light doesn't reach. In order to supply ambient light and reflection maps, sdPBR uses something called skybox.</p>
+<p>Now load skybox.x inside skybox folder.</p>
 
-<p>そして、忘れがちですが<b>skybox.xをモデルより後</b>に表示されるように設定します。おそらくさっきsdPBRGBuffer.xを先に入れているのでデフォルトのままで問題が無いのですが、表示がおかしい時はちょっと思い出してください。環境によっては必要なかったりしますが、これをやらないと少なくともGeForce環境ではskyboxの中身がシェーダ本体側から正しく認識されないことがあります。</p>
-<p>skybox.x自体の表示順はモデルより後で表示されるならばどこでもよいので後ろの方に置きましょう</p>
+<p>And although easy to forget, you should adjust the draw order so that <b>skybox.x appears after the model.</b> It shouldn't be a problem by default, because we put sdPBRGBuffer.x previously, but if it looks weird, please keep it in mind. Depending on the hardware, it might not be necessary, but without doing this, at least on GeForce, the shader might not correctly detect the skybox content.</p>
+<p>As long as it displays after the model it's good, so you should put skybox.x towards the back.</p>
 
-<p class="de">補足：skyboxフォルダに入っているskybox.xは何も画面に描画をしないので、とりあえず後ろで構いませんが、skybox2,3,skyboxScreenフォルダに入っているskybox〇〇.xの場合はフォグを描画する機能が有るので、そちらについては少し後で出てくるトーンマッパーよりは前に設定すると良いでしょう</p>
+<p class="de">side note: skybox.x in skybox folder won't draw anything to the screen, so it's fine to put it at the back for now. However, skyboxXX.x inside skybox2, 3, skyboxScreen folders can draw fog, so you should put those before the tone mapper, which I will explain later.</p>
 
 <p align="center">
 <a href="g/daiji.png"><img src="g/daiji.png" class="roundimg_s"></a>
 </p>
 
-<p>続けて、skyboxフォルダにあるskyboxDisplay.pmxも読み込みます。skyboxの中身のテスト表示用のエフェクト付きモデルです。これはあくまで「そういうモノがついてますよ」という説明用であって入れないと不具合を起こすような類のものではないです。まあ、入れといて困る事は無いですからとりあえず入れときましょう</p>
+<p>Continue by loading skyboxDisplay.pmx inside the skybox folder as well. It comes with an effect to test skybox content. This is just to show "it comes with this", and it won't cause any trouble if you don't use it. Well, there's no harm in using it, so let's load it anyway.</p>
 
 <p align="center">
 <a href="g/ten_pbr2.jpg"><img src="g/ten_pbr2.jpg" width=320 class="roundimg_s"></a>
 </p>
 
-<h3>5.sdToneMapper.xの読み込み</h3>
-<p>それから、posteffectフォルダにあるsdToneMapper.xも読み込みましょう。sdToneMapperは必ずしも入れる必要はないのですが、入れると色味が引き締まっていいですよ。同じフォルダにいくつか他のトーンマッパーも入っているので気分で変えるといいですね。</p>
+<h3>5. loading sdToneMapper.x</h3>
+<p>After that, load sdToneMapper.x inside posteffect folder. You don't necessarily have to use sdToneMapper, but if you do, colors will look more vivid. There are other tone mappers in the same folder so you can change depending on your mood.</p>
 
-<p>さて、多少は怖さが減りました？こんな感じで</p>
+<p>So, the scary appearance should be reduced now. Like this:</p>
 <ul>
-<li>モデルを読み込む
-<li>sdPBR.pmxを読み込む
-<li>sdPBRGBuffer.xを読み込む
-<li>モデルにmaterialフォルダに入っているエフェクトを割り当てる
-<li>skyboxフォルダに入っているskybox.xを読み込み、<b>モデルより後に表示されるよう設定する</b>
-<li>posteffectフォルダに入っているsdToneMapper.xを読み込む(任意)
-<li>skyboxフォルダに入っているskyboxDisplay.pmxを読み込む(任意)</b>
+<li>load models
+<li>load sdPBR.pmx
+<li>load sdPBRGBuffer.x
+<li>apply effects inside material folder to the model
+<li>load skybox.x inside skybox folder and <b>set draw order to show after the model</b>
+<li>load sdToneMapper.x inside posteffect folder (optional)
+<li>load skyboxDisplay.pmx inside skybox (optional)</b>
 </ul>
-<p>順番はバラバラでも大丈夫ですが、以上が基本的なsdPBRの使い方です</p>
+<p>the order doesn't matter, but this is the basic usage of sdPBR.</p>
 
-<h3>余談：sdToneMapper.xがsdPBR.pmxに内蔵されていないのはなぜ？</h4>
-<p>MMEに慣れている方は「トーンマッパーくらいsdPBR.pmxの方に内蔵してくれないの？」と思うかもしれませんが、トーンマッパーは元々輝度が1より大きい部分を含む(High Dynamic Rangeで作られている)絵をモニタで表示できる輝度1以下の(Standard Dynamic Rangeの)範囲に圧縮するエフェクトなので、内蔵してしまうと輝度1より大きい部分が丸められてしまうんですね。つまり<b>sdToneMapper.xはsdPBRに付属のほとんどのポストエフェクトや、AutoLuminousやmsPowerDiffusionなど他のHDR対応ポストプロセスより後に指定してください。</b>それが出来るようにするためにわざと内蔵ではなく別のポストエフェクトに分けてあるんですね。意外と周到でしょ？</p>
+<h3>off-topic: Why is sdToneMapper.x not included in sdPBR.pmx?</h4>
+<p>If you are well-versed in MME, you might think "Why don't you just put tone mapper inside sdPBR.pmx?" Tone mappers will compress images with brightness higher than 1 (High Dynamic Range) to brightness lower than 1 (Standard Dynamic Range) that can be displayed with monitors. If you include that, higher brightness will be rounded. So <b>put sdToneMapper.x after most posteffects that comes with sdPBR, and other HDR posteffects like AutoLuminous and msPowerDiffusion.</b> In order to do that, I intentionally made tone mapper as separate posteffect. That's thorough, isn't it?</p>
 
-<h2>ステージと光源の追加</h2>
+<h2>Stage and adding lights</h2>
 
-<p>まだこれでは嬉しさが分かりませんから、背景モデルを読み込んでみましょう。MMDの「UserFile\Accessory\stage01.x」を読み込みます。それから、「座標軸」は消して、「表示」メニューからの設定で「地面影」は消し、「モデル編集時カメラ・照明追従」にチェックをしておきましょう。</p>
+<p>That's not enough, so let's load background models. Load "UserFile\Accessory\stage01.x" included in MMD. Then, hide "coordinate axis" and "ground shadow" and enable "camera lighting tracking" from "view" menu.</p>
 
 <p align="center">
 <a href="g/stage.jpg"><img src="g/stage.jpg" width=320 class="roundimg_s"></a>
 </p>
 
-<p>そしたら、背景にもsdPBRのエフェクトを割り当てます。メタリックだとカッコ良さそうですね。material\etc\sdPBR_metal_mid.fxを割り当ててみましょう。ほかにもマテリアルは色々入ってますから、読み込み時間は掛かりますが、好きなのを探してみると楽しいですね。天龍ちゃんの艤装にも同じマテリアルを割り当てておきましょうか。</p>
+<p>Now, we'll apply sdPBR effect to the background as well. A metallic look would be cool! Let's apply material\etc\sdPBR_metal_mid.fx. There are more materials included, so although it'll take some time to load, it's good to find materials that you like. Let's apply the same material to Tenryu-chan's equipment.</p>
 
-<p>次はステージにスポットライトを当ててみましょうか。配布アーカイブのlighting\SpotLightフォルダにある、SpotLightVol.pmxをドロップします</p>
-<p>最初の状態では明るさがゼロなので何も変化がありません。SpotLightVol.pmxの表情操作パネル左上にある<b>明るさ</b>モーフを1まで上げましょう</p>
+<p>Let's add a spotlight on the stage. Drop SpotLightVol.pmx inside lighting\SpotLight folder in distribution archive.</p>
+<p>By default, there's no difference because the brightness is at zero. Set <b>V</b> morph (brightness) in the top left of facial manipulation panel in SpotLightVol.pmx to 1.</p>
 
 <p align="center">
 <a href="g/spot.jpg"><img src="g/spot.jpg" width=320 class="roundimg_s"></a>
 </p>
 
 
-<p>なんだか煙たくなりました。SpotLightVolはこういう光っている範囲が露骨にスモーキーになるいわゆる「ボリュームライト」と言われる物です。ファイル名にVolとついてないSpotLightはボリューム感がありません。</p>
-<p>ボリュームライトを出したら重くて仕方がないという場合はVolのついてない、普通のSpotLightにしてください。地面と天龍ちゃんに落ちる照明は変わらないので説明上の問題はありません。</p>
+<p>It looks smoky now. SpotLightVol will make the illuminated area appear smoky, which is called "volumetric light". SpotLights without Vol in their names are not volumetric.</p>
+<p>If the volumetric effect is too heavy, use normal SpotLight without Vol. The lights that will illuminate ground and Tenryu-chan are the same, so it shouldn't be a problem.</p>
 
-<p>位置をちょっと変えて、Y=30あたりまでもっていきましょうか。そうしたら次は表情モーフの右上のリストに入っている<b>コーン角度</b>モーフを0.85まで上げて、X軸周りに-90度回転させてスポットライトのコーンを作るようにします。頭の片隅に置いて頂きたいんですが<b>コーン角度を0.5より大きくしないとスポットライトによる影が付きません。</b>また、なるべく必要な範囲にコーンを絞るのが良いと思います。不必要に広げると影が粗くなります</p>
+<p>How about changing light position? We'll move it to around Y=30. Then, in the top left list of facial morphs, set <b>ConeAngle</b> morph to 0.85, and rotate by -90 degrees in X axis to make spotlight cone. I want you to keep it in mind: <b>spotlights won't cast shadows if ConeAngle is less than 0.5.</b> Also, you should narrow the cone as much as possible. If you widen too much, the shadows will become rough.</p>
 
-<p>それから、ライトの色も変えてみましょう。表情モーフの左上のリストにある<b>彩度</b>を上げるとライトが赤くなると思います。その状態から、<b>色相</b>をいじってみましょう。ライトの色合いが変化します</p>
+<p>And let's change the color of the light. If you increase <b>S</b> (saturation) in the top left list of facial morphs, the light will turn red. From that state, adjust <b>H</b> (hue) morph. The hue of the light will change.</p>
 
-<p class="de">sdPBRでは色についての指定は基本的に<b>色相・彩度・明るさ</b>の3要素で指定する、いわゆるHSV色表現で行います。RGBの方が慣れているかもしれませんが、実際に動画を作っていると「明るさを保持しつつ白黒にしたい→彩度を下げる」とか「色合いは変えずに明るさだけ変えたい→明るさだけ変える」とか「虹色に変化させたい→色相を変える」と思う状況が多いと思います。そういう時にRGB色表現の場合、RGBの3つともいじらないといけないので、キーが多くなって煩雑です。特に虹色に変化させるためのモーションをRGBで打つなんてどうやるか、すぐ見当がつくでしょうか？ですから時間的に変化させる必要性が高い色の指定についてはHSV色表現の方が実用上有利であると判断し、このような実装にしました</p>
+<p class="de">In sdPBR, colors are specified using three elements: <b>Hue, Saturation, Brightness</b>, which is called HSV color representation. You might be more used to RGB, but when actually making videos, there are many situations where you want to "make it black and white while keeping the brightness so lower the saturation", or "change only the brightness without changing the hue so change only the brightness", or "make it rainbow-colored so change the hue". In such cases, with RGB color representation, you have to adjust all three RGB values, which makes it complicated. Especially, can you immediately figure out how to animate a rainbow color change using RGB? That's why, for colors that need to change over time, I decided that HSV color representation is more practical, and implemented it this way.</p>
 
 <p align="center">
 <a href="g/spot2.jpg"><img src="g/spot2.jpg" width=320 class="roundimg_s"></a>
 </p>
 
-<p>さて、<b>明るさ</b>モーフ1.0より明るくしたい場合はどうしたらいいかも説明しておきましょう。右上のリストに入っている<b>距離100倍</b>モーフをいじるといきなり明るくなります。<b>距離100倍</b>モーフで大雑把なスケールを取って、細かい明るさの調整を<b>明るさ</b>モーフでやるといいでしょう。スポットライトのフチがハッキリしているのも興覚めだと感じるなら右上のリストに入っている<b>ゆるコーン</b>モーフを0.5くらいにしてコーンのフチを滑らかにできます。</p>
+<p>Now, let me also explain what to do if you want to make it brighter than V morph 1.0. If you adjust the <b>Distancex100</b> morph in the top right list, it will become much brighter. Use the <b>Distancex100</b> morph for rough scaling, and fine-tune the brightness with the <b>V</b> morph. If you feel the edge of the spotlight cone is too sharp and ruins the mood, set the <b>ConeDullness</b> morph in the top right list to about 0.5 to make the cone edge smoother.</p>
 
-<p>光源のある場所だけなんだかジリジリしてて「ここから光がでてます！」とアピールしている感じが気になりますか？右上の<b>光源半径</b>モーフを0.2くらいまで上げてみましょう。光源半径モーフによって仮想的な光源自体の大きさを指定できます。光源半径が0の場合、光源の位置ジャストの部分だけが露骨に明るくなりますが、光源半径を大きくすると、(<b>光源マーカー</b>モーフを上げないと画面には表示されませんが)光源の表面までの距離については明るさが一定になり、表面からの距離で減衰が計算されるようになります。ちなみに、<b>光源半径</b>モーフが1の時、半径は100MMD距離(8m相当)として計算されます。結構巨大ですがもっとデカくしたい時は数値を直接入力しましょう。</p>
+<p>If you feel that where the light source is located looks too bright and it's too obvious that "the light is coming from here!", try raising the <b>LightRadius</b> morph in the top right to about 0.2. The Light Radius morph allows you to specify the virtual size of the light source. If the Light Radius is 0, only the exact position of the light source will be prominently bright, but if you increase the Light Radius (it won't be displayed on the screen unless you also raise the <b>DisplayMark</b> morph), the brightness will be constant up to the surface of the light source, and fading will be calculated based on the distance from the surface. By the way, when the <b>LightRadius</b> morph is 1, the radius is calculated as 100 MMD units (equivalent to 8 meters). It's quite large, but if you want it even bigger, just enter the value directly.</p>
 
-<p class="de">※<b>光源半径</b>モーフで本当に球状の大きさの有る光源が作られるのかと言うと、実際にはそうではありません。あくまで減衰しない半径を指定できるというだけのモーフです。本当に大きさの有る光源は四角いライト(RectLight)によって作る事が出来ます</p>
+<p class="de">* Does the <b>LightRadius</b> morph really create a spherical light source? Actually, it doesn't. It just allows you to specify a radius where there is no fading. Truly large light sources can be created with rectangular lights (RectLight).</p>
 
 <p align="center">
 <a href="g/spot3.jpg"><img src="g/spot3.jpg" width=320 class="roundimg_s"></a>
 </p>
 
-<p>光源だけでもふんわりして良い感じじゃないですか？ここから天龍ちゃんの質感をパーツごとに選択する方法を説明しましょう</p>
+<p>Doesn't it already look nice and soft with the light source? From here, let's explain how to select the texture for each part of Tenryu-chan.</p>
 
 
-<h2>天龍ちゃんの質感を向上する</h2>
+<h2>Improve the texture of Tenryu-chan</h2>
 
-<p>現時点の設定では、天龍ちゃんは全身sdPBR_skin.fxという肌用の質感を割り当てるシェーダ1本で描かれることになっています。服は服の材質、髪は髪の材質を割り当てないと、それっぽくならないのは当然ですから、なんとかしましょう。MMEffectメニューで「エフェクトの割り当て」を開いて</p>
+<p>Currently, with the current settings, Tenryu-chan is being rendered with just one shader for skin, sdPBR_skin.fx, applied to her whole body. Of course, if you don't assign clothing materials to clothes and hair materials to hair, it won't look right, so let's fix that. Open "Effect Mapping" from the MMEffect menu.</p>
 
-<p>「天龍改二.pmx」を右クリックで選択して「サブセット展開」メニューをクリックすると、材質ひとつひとつに違うエフェクトファイルを割り当てることが出来るようになります。材質数が100を超えるような超本格的なモデルもしばしばありますから、慣れないといかにも面倒に感じるかもしれませんが、どのファイルがどんな材質だったか覚えてくるとサクサクと進められて、塗り絵感覚で楽しめますよ！</p>
+<p>If you right-click "天龍改二.pmx" and click the "Subset-Extract", you can assign different effect files to each material. There are sometimes models with over 100 materials, so it might feel like a hassle if you're not used to it, but once you remember which file is for which material, you can proceed quickly and enjoy it as if you're coloring!</p>
 
-<p>同梱のマテリアルの一覧も作ってあります<font size="+2"><a href="https://pennennennennennenem.github.io/MME/sdPBR/index.html">こちら</a></font>(githubのページに飛びます)です。ネタが思いつかない時などに気まぐれで更新しているのでちょっとアップデートが遅いですが…役には立つと思います、ハイ</p>
+<p>There is also a list of included materials <font size="+2"><a href="https://pennennennennennenem.github.io/MME/sdPBR/index.html">here</a></font> (jumps to github page). I update it from time to time when I am out of ideas, so the updates might be a bit slow... but I think it will be useful.</p>
 
 <p align="center">
 <img src="g/subset.png" class="roundimg_s"></a>
 </p>
 
-<p>スポットライトは一旦消して、どの材質名がどこに相当するのか調べながら、全部割り当ててみました</p>
+<p>I turned off the spotlight for now, and assigned all of the materials while checking which material name corresponds to which.</p>
 
-<p>エフェクト割り当てダイアログの「モデル単位で設定保存」を利用すると割り当てたエフェクトファイル一覧を保存して、他のpmmとの間で使いまわせますから、気合入れて割り当てたら保存しておくと捗りますよ</p>
+<p>If you use the "Save by Model" button in the effect mapping dialog, you can save the list of assigned effect files and reuse them between different pmm files, so if you put effort into assigning them, it's efficient to save it.</p>
 
-<p>素材の割り当てが終わったら、MMDの光源やカメラを動かしてみると、元より大分雰囲気が変わるのが分かると思います</p>
-<p>ぜひとも、みなさんのお気に入りのモデルやお気に入りの背景でも試してみてください！</p>
+<p>Once you've finished assigning materials, try moving the MMD lights and camera, and you'll see that the overall look has changed significantly.</p>
+<p>You should absolutely try it with your favorite models and backgrounds!</p>
 
-<p>光源の配置や向きで大分印象が変わります。色々いじってみると楽しいと思います</p>
+<p>The look changes a lot depending on the placement and direction of the light sources. I think it's fun to try various things.</p>
 
 <p align="center">
 <a href="g/dekita.jpg"><img src="g/dekita.jpg"  width=320 class="roundimg_s"><br></a>
-<font size="-1">何十年も修行して達人にでもなるのを待ってからニコニコに出すつもりか？気の長ェ話だな</font></a>
+<font size="-1">Are you planning to wait until you become a master after decades of training before posting to NicoNico? That's a long story.</font></a>
 </p>
 
-<p>ところで、材質の変更のためのシェーダの読み込みに時間がかかるので材質の変更時にイライラするという場合は、使う予定のある素材を一通り割り当てたエフェクトキャッシュ的な物体を作っておくと、待たされるのはpmm読み込み時や再読み込み時だけになるので良いかもしれませんよ？</p>
+<p>Fun fact, it takes a bit to load shaders when changing materials, so you can make an effect cache that has all the materials you are going to use. That way, you only have to wait for the pmm file and MME to reload.</p>
 
 </body>
 </html>
