@@ -105,7 +105,7 @@
 <p>Now, we'll apply sdPBR effect to the background as well. A metallic look would be cool! Let's apply material\etc\sdPBR_metal_mid.fx. There are more materials included, so although it'll take some time to load, it's good to find materials that you like. Let's apply the same material to Tenryu-chan's equipment.</p>
 
 <p>Let's add a spotlight on the stage. Drop SpotLightVol.pmx inside lighting\SpotLight folder in distribution archive.</p>
-<p>By default, there's no difference because the brightness is at zero. Set <b>V</b> morph (brightness) in the top left of facial manipulation panel in SpotLightVol.pmx to 1.</p>
+<p>By default, there's no difference because the brightness is at zero. Set <b>V</b> morph (brightness) in the top left of the facial manipulation panel in SpotLightVol.pmx to 1.</p>
 
 <p align="center">
 <a href="g/spot.jpg"><img src="g/spot.jpg" width=320 class="roundimg_s"></a>
@@ -127,7 +127,7 @@
 
 <p>Now, let me also explain what to do if you want to make it brighter than V morph 1.0. If you adjust the <b>Distancex100</b> morph in the top right list, it will become much brighter. Use the <b>Distancex100</b> morph for rough scaling, and fine-tune the brightness with the <b>V</b> morph. If you feel the edge of the spotlight cone is too sharp and ruins the mood, set the <b>ConeDullness</b> morph in the top right list to about 0.5 to make the cone edge smoother.</p>
 
-<p>If you feel that where the light source is located looks too bright and it's too obvious that "the light is coming from here!", try raising the <b>LightRadius</b> morph in the top right to about 0.2. The Light Radius morph allows you to specify the virtual size of the light source. If the Light Radius is 0, only the exact position of the light source will be prominently bright, but if you increase the Light Radius (it won't be displayed on the screen unless you also raise the <b>DisplayMark</b> morph), the brightness will be constant up to the surface of the light source, and fading will be calculated based on the distance from the surface. By the way, when the <b>LightRadius</b> morph is 1, the radius is calculated as 100 MMD units (equivalent to 8 meters). It's quite large, but if you want it even bigger, just enter the value directly.</p>
+<p>If you feel that where the light source is located looks too bright and it's too obvious that "the light is coming from here!", try raising the <b>LightRadius</b> morph in the top right to about 0.2. The Light Radius morph allows you to specify the virtual size of the light source. If the Light Radius is 0, only the exact position of the light source will be prominently bright, but if you increase the Light Radius (it won't be displayed on the screen unless you also increase the <b>DisplayMark</b> morph), the brightness will be constant up to the surface of the light source, and fading will be calculated based on the distance from the surface. By the way, when the <b>LightRadius</b> morph is 1, the radius is calculated as 100 MMD units (equivalent to 8 meters). It's quite large, but if you want it even bigger, just enter the value directly.</p>
 
 <p class="de">* Does the <b>LightRadius</b> morph really create a spherical light source? Actually, it doesn't. It just allows you to specify a radius where there is no fading. Truly large light sources can be created with rectangular lights (RectLight).</p>
 
