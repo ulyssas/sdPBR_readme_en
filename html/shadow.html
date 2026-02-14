@@ -4,89 +4,89 @@
 <meta charset="utf-8">
 <meta name="Description" content="MikuMikuEffect">
 <meta name="KeyWords"  content="MikuMikuEffect MMD MME MikuMikuDance HLSL">
-<title>sdPBR 影の伝説</title>
+<title>sdPBR the legend of shadow</title>
 <link  rel="stylesheet"  type="text/css"  href="mme.css">
 </head>
 
 <body>
 
-<h1>キレイな影を作る</h1>
+<h1>How to make beautiful shadow</h1>
 
 <p>
-Version 3.40から影を作るためのシャドウマップが全体的に見直され、シャドウマップのためのコードに大きく手入れをしました。これにより、従来よりも綺麗な影を作れるようになったのですが、デフォルトではそんなに変わらないどころか従来よりも品質が悪く見えるケースもあるかもしれません。そんなわけで、影をきちっと調整して綺麗な影を作るための方法をまとめる事にしました。
+Starting with version 3.40, the shadow map for shadow rendering has been completely overhauled and the shadow map code has been significantly refined. This allows you to create more beautiful shadows than before, but by default, not only will they not look much different, but in some cases, they may even look worse than before. That's why I've put together a tutorial to precisely adjust shadows to make them more beautiful.
 </p>
-<p>とはいえ、ほとんど平行光源の影についての話しか書いてないので追加ライトとskyboxしか光源使って無いです、という場合は読まなくてもいいです。平行光源のシャドウマップは広い範囲に掛かるのでちゃんと作るのが本当に大変なのです。</p>
+<p>However, since most of the topic is about the shadows of directional light, you don't need to read it if you only use additional lights and skyboxes as light sources. Shadow maps for directional light are really hard to create properly because they cover a large area.</p>
 
-<h2>sdPBRconfigでの設定</h2>
+<h2>Settings in sdPBRconfig</h2>
 
-<p>シャドウマップの品質は付属のsdPBRconfig.exeでいじる事が出来ます。シャドウマップの品質に関わるオプションは以下の通りです。どのオプションもドロップダウンリストの下の方を選ぶと高品質・低速になります。すでにある程度sdPBRをいじっていて大体分かる方は読み飛ばしてOKです。</p>
+<p>You can tinker with the quality of the shadow map using the included sdPBRconfig.exe. The following are the options related to the shadow map quality. The lower the option you choose in the dropdown, the higher the quality and slower the performance. If you've already played around with sdPBR to some extent and have a general idea, you can skip this part.</p>
 <table cellpadding=8>
     <tr>
-        <td nowrap>平行光源シャドウマップの層数</td>
-        <td>MMDの照明設定で指定される平行光源はステージ全体など極めて広い範囲に照射される事があるので、狭い・広い範囲を担当するシャドウマップを分ける事で広い範囲に影を作る事が出来ます。詳細は後述します</td>
+        <td nowrap>Parallel shadow map cascades</td>
+        <td>Directional lights specified in MMD lighting settings can illuminate an extremely wide area, such as the entire stage, so you can create shadows over a wide area by separating the shadow maps responsible for narrow and wide areas. Details will be given later.</td>
     </tr>
     <tr>
-        <td nowrap>平行光源シャドウマップフィルタ直径</td>
-        <td>シャドウマップを仕上げる時にブロック状にならないようぼかしを掛けます。そのときの画面上での最大ぼかし範囲です。sdPBR.pmxの<b>影マップぼかし</b>モーフを上げた時はこの数値も大きくするとより意図したボケ方になると思います</td>
+        <td nowrap>Parallel light shadow map filter</td>
+        <td>When finalizing the shadow map, sdPBR blurs it so that it doesn't become blocky. This is the maximum blur range on the screen at that time. If you increase <b>ShadowMapBlur</b> morph in sdPBR.pmx, increasing this value as well may help achieve the intended blur effect.</td>
     </tr>
     <tr>
-        <td nowrap>シャドウマップのサイズ</td>
-        <td>シャドウマップの解像度を指定します。倍率の基準になっているのは出力画面の解像度です。4K出力時に4倍を選んでいると16Kx16Kのシャドウマップが作られようとします。作者が言うのもなんですが、そんなの作れるんですかね？ともかく、影の品質を決める上で大変重要で、効果も比較的分かりやすいですが、分かりやすく重くなります…。出力時に落ちる時はこれを欲張って大きくしすぎていないか調べてみましょう。</td>
+        <td nowrap>Size of shadow maps</td>
+        <td>Specifies the resolution of the shadow map. The magnification is based on the resolution of the output screen. If you select 4x when outputting to 4K, a 16Kx16K shadow map will be created. Even as the author, I wonder if it's possible to make something like that. In any case, this is very important for determining the shadow quality, and the effect is easy to see, but it comes with a noticeable performance cost. If it crashes when rendering, check if you have set it too high.</td>
     </tr>
 </table>
 
-<p>個人的には、基本的に松設定で作って、仕上げに入る段階でビデオメモリに余裕が有ればシャドウマップのサイズを2倍にするくらいでいいんじゃないかと思います。4K出力の場合はシャドウマップのサイズをむしろ下げて、MMDが落ちないか様子を見た方が良いかもしれません。</p>
+<p>Personally, I think it would be fine to use 松(better) setting in general, and only double the size of the shadow map for finalization if you have enough video memory. For 4K output, you might actually want to reduce the size of the shadow map to see if MMD crashes.</p>
 
-<h2>重くせずにシャドウマップを綺麗にする</h2>
+<h2>Make your shadow maps look nice without making them heavy</h2>
 
-<p>さて、ここからが本編です。今までの方法は作りたいカットに依存せずに通用する項目ですから、品質を上げる効果は大体どんな時でもあるのですが、シーンに合わせた調整をやる事でさらに品質を上げたり、より軽い設定で同じ品質を手に入れたりできます。</p>
+<p>Now, here comes the main topic. The previous method works regardless of the scene you want to make, so it will usually improve the quality. But you can improve the quality even further, or get the same quality with a lighter setting by adjusting it to suit the scene.</p>
 
 <p align="center" class="de">
 <a href="g/shadow1.jpg"><img src="g/shadow1.jpg" width=320 class="roundimg_s"></a>
 <a href="g/shadow5.jpg"><img src="g/shadow5.jpg" width=320 class="roundimg_s"></a><br>
-天龍ちゃんは(｀・ω・)様、背景はムムム様よりお借りしました。
+Tenryu-chan by (｀・ω・), background by Mumumu.
 </p>
 
-<p>まずは影の調整にとても役立つ味方が増えました。sdPBR.pmxの表情操作パネル右下にある、<b>影マップ情報</b>モーフを上げるとシャドウマップについての情報が表示されるようになります。</b></p>
+<p>First, there are now more tools useful for adjusting shadows. Increasing the <b>IlluminanceMeter</b> morph (shadow map info, the bottom one) in the bottom right of the facial manipulation panel in sdPBR.pmx will reveal information about the shadow map.</p>
 
-<p>何か画面が色分けされるようになるんですけど、MMDの標準のセルフシャドウ用のシャドウマップとは異なり、sdPBRのシャドウマップは最大4層になっており、各層を1枚ずつのシャドウマップで作っています。シャドウマップの解像度は4枚とも同じですが、カバーする範囲が狭い物と広い物があります。このため、狭いシャドウマップでカメラから近い所の細かい影を作り、広いシャドウマップでカメラから遠い所のおおまかな影を作る、という事になっています。</p>
+<p>The screen will be color-coded. Unlike MMD's standard self-shadow shadow maps, sdPBR's shadow maps have up to four layers, with each layer consisting of one shadow map. All four shadow maps have the same resolution, but some are narrower than others. For this reason, a narrow shadow map is for casting fine shadows close to the camera, and a wide shadow map casts a rough shadows far from the camera.</p>
 
-<p>色分けの意味はその色の付いている領域を担当するシャドウマップについての情報でして、赤：最も狭い、黄：やや狭い、緑：やや広い、青：最も広いシャドウマップという事になっています。なお、どのシャドウマップからも漏れていて影が掛からない所は白で表示されます。</p>
+<p>Color coding shows which shadow map are responsible for each colored area. red: narrowest, yellow: somewhat narrow, green: somewhat wide, blue: widest shadow map. Note that areas that are not in any shadow maps won't be shaded and are displayed in white.</p>
 
-<p>そんなわけで、赤の領域内に主役モデルの良く写したい所をキッチリ納めれば、大体いい結果になります。モーションによって赤の範囲からはみ出すでしょうから、ちょっと広めに取るといいかもしれません。デフォルトの設定では大体のダンス・モデルで全身がはみ出さないだろうという程度の広さになっていますから、結構無駄があります。スペースに無駄が有るという事は、シャドウマップが必要以上に広くなっていて、粗い物になってしまっているという事です。</p>
+<p>So, if you keep the main model within the red area, the results will generally be good. Depending on the motion, it might sometimes go out of the red area, so you should make the red area a little wider. By default it is wide enough to cover the most dance motion & model combination so that the entire body will not protrude, so there is a lot of waste. The wasted space means that the shadow map is wider than necessary and ends up producing rough shadows.</p>
 
-<p>ですから、まずは赤の領域の中央を、sdPBR.pmxの<b>エフェクト－分割中心</b>というボーンで操作できますから、これを主役モデルの胴(顔のアップのショットを取りたい場合は顔の中心)あたりにセットしましょう。次に、表情操作パネルで<b>影マップ細かさ</b>モーフを上げて行って、赤の領域を狭めていきます。</p>
+<p>So first, place the center of the red area around the torso of the main model (or the center of the face if you want to take a close up shot of the face). This can be controlled with the bone called <b>ShadowMap - ShadowMapCenter</b> in sdPBR.pmx. Next, narrow the red area by increasing <b>ShadowMapDetail</b> morph in the facial manipulation panel.</p>
 
 <p align="center" class="de">
     <a href="g/shadow2.jpg"><img src="g/shadow2.jpg" width=320 class="roundimg_s"></a>
     <a href="g/shadow4.jpg"><img src="g/shadow4.jpg" width=320 class="roundimg_s"></a><br>
-    影がシャープになり天龍ちゃんの前髪の形までハッキリと影に反映されているのが分かるかな？？
+    Can you see how the shadows have become sharper and even the shape of Tenryu-chan's bangs is clearly reflected in the shadows?
 </p>
     
-<p>赤の領域で主役モデル全身丁度入るくらいに合わせたら、使いたいダンスモーションなどを再生して、様子を見てみましょう。何もしない状態と比べて影のブロック感などがおちついたと思います。実際にはダンス全体を通してちょっとくらい赤の領域からモデルがはみ出してもちょうどアップのカットで顔がハミ出したとかでもなければまず気になりませんから、そう神経質にならなくても大丈夫です。</p>
+<p>Once you've scaled the red area to fit the entire main model, play the dance motion you want to use and see how it looks. The shadow blockiness and other issues should have been reduced compared to before. Actually, unless the model's face sticks out during the close up, it is fine if the model goes slightly out from the red area during the dance.</p>
 
-<p>特にGPUパワーやメモリを余分に使うでもなく影が幾分綺麗になるのですから、新しいPCやグラボを買わなくても良くなるかもしれませんよ、やったね！？</p>
+<p>This is great news, because the shadows will look more beautiful without any extra GPU power or memory, and buying a new PC or graphics card might become unnecessary, hooray!</p>
 
-<p>ところで、<b>分割中心</b>ボーンの外部親にモデルの胴などを設定すればいいのでは？と思うかもしれませんが、あまりお薦めしません。やってみるとすぐ分かりますが、分割中心ボーンを動かすと影の輪郭がプルプル動いて不快な状態になりがちです。</p>
+<p>By the way, you might think "Shouldn't using model body etc. as the outside parent of <b>ShadowMapCenter</b> bone work?", but I don't really recommend doing that. As you can easily see by trying that, when you move ShadowMapCenter bone, the shadow outline will become jittery, which does not look good.</p>
 
-<h2>その他の調整用モーフの話</h2>
+<h2>Other adjustment morph stories</h2>
 
-<p><b>影マップぼかし</b>モーフも使うと楽に影の調子を整えられます。モーフの値が低い時は影はブロック状になり、値を大きくするごとに広い範囲でボケるようになります。このモーフに大きな値を指定した時はsdPBRconfigでも<b>平行光源のシャドウマップフィルタ直径</b>を大きくすると意図したボケ具合になりやすいです(少しだけ重くなります)。ただし、影マップぼかしを大きくするとノイズが出やすくなるので<b>影マップゆとり</b>モーフも一緒に上げると良いでしょう</p>
+<p><b>ShadowMapBlur</b> morphs can also be used to easily tune shadows. When the morph value is low, the shadow becomes blocky, and as the value increases, it becomes more and more blurred. If you specify a large value for this morph, it is recommended to increase <b>Parallel light shadow map filter</b> in sdPBRconfig as well. Increasing this value may help achieve the intended blur effect (it'll become a little heavier). However, if you increase ShadowMapBlur, noise will easily appear, so you should increase <b>ShadowMapOffset</b> morph as well.</p>
 
-<p><b>影マップゆとり</b>モーフはシャドウマップ由来のノイズを抑えるために用います。髪の毛の影のように影を出す側と影を落とされる側の距離が近い所に影を落とさなくなるので、顔に影が落ちるのを嫌う場合は上げると手軽にその辺りの調整を出来ます</p>
+<p><b>ShadowMapOffset</b> morph is used to suppress noise coming from shadow maps. When increased, it will no longer cast shadows if the shaded object is close to the shadow caster, like the hair shadow, so if you don't like shadows casting on the face, you can easily adjust those areas.</p>
 
- <p>それから、ここまで紹介していなかった<b>影マップ広さ・平行光源高さ</b>モーフについても補足しておきましょう。<b>影マップ広さ</b>モーフは一番広い領域である影マップ情報での青の領域の広さを指定します。モーフの値が大きくなるほど青の領域が広がり、それにつられて緑・黄色の領域も広がりますが、赤の領域のサイズは変わりません。遠い所の影のガタつきも多少とも抑えたいという場合はこのモーフをいじって影を落としたい範囲全体に青の領域がフィットさせると良いでしょう。<b>平行光源高さ</b>モーフは影を落とさせたい建物の最大高さみたいな物だと思ってもらえればいいかと思います。いくらでも高くしまくると浮動小数の計算の精度の問題が出るので、影マップ情報の白い範囲が目立たない限りはなるべく小さく抑えた方が細かい影が正確に落ちやすくなります。</p>
+ <p>Now, let's talk about <b>ShadowMapWide & LightHeight</b> morphs I haven't mentioned yet. <b>ShadowMapWide</b> morph specifies the size of the blue area in the shadow map info, which is the largest area. The larger the morph value, the larger the blue area, which in turn expands the green and yellow areas, but the red area remains the same. If you want to reduce the shadow artifacts in distant places, you can adjust this morph to make the blue area fit the entire area you want to cast shadows. For <b>LightHeight</b> (directional light height), you can think of it as the maximum height of the building you want it to cast shadows. If you make it way too high, there will be problems with the accuracy of the floating point calculation, so as long as the white area in the shadow map info is not noticeable, you should keep it as small as possible so that it can accurately cast fine shadows.</p>
 
-<h2>影を落とす物体と落とさない物体を分ける</h2>
-<p>帽子をかぶったキャラの顔が帽子の影に隠れてしまって困ったり、前髪の影が顔に掛かるけど細かい調整をするのも面倒だし、モデルに描いてある影を活かしたいから出来れば髪の影だけ無くしたい、という状況があるでしょう。それにはMMEffectダイアログのsdPBR_SD0～SD3というタブを見ると解決するかもしれません。</p>
-<p>sdPBR_SD0～SD3という4つ並びのタブは平行光源のシャドウマップを作るためのエフェクトが並べられています。影を作る元になる物体のチェックを外すと、その物体から影が落ちなくなります。例えばsdPBR_SD0タブから天龍ちゃんの前髪のチェックを外すと</p>
+<h2>Choosing which objects cast shadows</h2>
+<p>There may be situations where a character wearing a hat has their face obscured by the hat's shadow, or where the shadow of their bangs falls across their face, but it can be a hassle to make fine adjustments. You might want to eliminate only the shadow of their hair to make the most of the model's painted shadows. If that's the case, you should check the sdPBR_SD0-SD3 tabs in the MMEffect dialog.</p>
+<p>The four tabs, sdPBR_SD0-SD3, contain effects to create a shadow map of directional light. If you uncheck the object that casts the shadow, the shadow will not be cast from that object. For example, if you uncheck Tenryu-chan's bangs from the sdPBR_SD0 tab,</p>
 <p align="center">
     <a href="g/shadow3.jpg"><img src="g/shadow3.jpg" width=640 class="roundimg_s"></a>
 </p>
-<p>このように、前髪の影だけ無くなります。モデルの構造にもよりますけど、色んな所から色んな影が作られている事が有るので、色々試してみるのが良いと思います。ちなみにsdPBR_SD0が一番細かい赤の領域の影を作り、SD1が黄、SD2が緑、SD3が青に対応していますから、外すと決めたら面倒でも4つのタブそれぞれ全部からチェックを外した方が良いと思います。</p>
-<p>ここまでは、影を落とす側を除外する方法でしたが、影を受ける側で調整できないかと思う事も有るでしょう。それにはマテリアルのshadowVisibilityパラメータを調整することで行います。方法については<a href="material.html">マテリアルの作成法</a>を読んでください。全ての物体で一括して影の濃さを調整するにはsdPBR.pmxや追加ライトの<b>影を薄める</b>モーフを使うという方法もあります。</p>
-<p>顔に濃く影が落ちるのがイヤな場合は、顔マテリアルとしてshadowVisibilityの低いマテリアルを用意するといいかもしれませんが、首と顔の間にギャップが出来たように見える事が有るので標準では用意されておりません。首にスカーフなどを巻いている場合は使えると思います。このパラメータをいじると物理的に正しくなくなりそうですけど、本物の髪はポリゴンの髪と違ってある程度透過率があるしポリゴンよりもまばらになっているのでshadowVisibilityを意図的に下げて髪の影が薄くなった方がかえって現実味があるかもしれません。勿論、髪だけでなく建物などから落ちる影も薄くなってしまうので使いどころを選びますけど。</p>
-<p class="de">シャドウマップの原理上、ステンドグラスのように色や透過率のついた影という物は落とせません。ステンドグラスの形・色の影をどうしても表現したいという場合は影ではなく光を工夫するということで、ライトのIESプロファイルを使うのが宜しいと思います。deep opacity mapのような特殊なシャドウマップを作る事である程度近似出来るようですが、平行光源のように広い範囲に影を作る事を念頭にしたライトに実装するのはメモリや速度面を考えると無謀であると思います。</p>
+<p>as you can see, only the shadow of the bangs disappears. It depends on the structure of the model, but there are many different shadows that can be cast from many different objects, so I think it's a good idea to try out various things. By the way, sdPBR_SD0 creates a shadow in the finest red area, and SD1 corresponds to yellow, SD2 corresponds to green, and SD3 corresponds to blue, so if you decide to remove shadow, I think it's better to uncheck all four tabs, even though it's tedious.</p>
+<p>So far, the main focus was about excluding the shadow caster, but you may wonder if you can adjust the shadow receiver. This is done by adjusting the shadowVisibility parameter of the material. Please read <a href="material.html">How to make materials</a> for the method. To adjust the shadow intensity for all objects at once, you can use <b>ShadowDensity</b> morph in sdPBR.pmx or additional lights.</p>
+<p>If you don't like dark shadows on the face, it might be a good idea to use a material with low shadowVisibility for the face. However, this is not available by default as it can make it look like there is a gap between the neck and face. I think you can use it if the model has a scarf or something around their neck. Tinkering with this parameter will likely make it physically incorrect, but real hair is somewhat more transmissive and sparser than polygonal hair, so intentionally lowering shadowVisibility to lighten the hair shadow might make it more realistic. Of course, that depends because it also lightens the shadows cast from buildings and other objects.</p>
+<p class="de">Due to the way shadow maps work, it's not possible to cast colored and transparent shadows like stained glass. If you really want to render the shadow from a stained glass shape or color, you can use a light IES profile instead of tweaking shadows. It seems that a special shadow map such as a deep opacity map can be used to approximate it to some extent, but I think it's basically impossible to implement it on a light like a direct light, which can cast shadows over a wide area, given the amount of memory and performance cost.</p>
 
 </body>
 </html>
