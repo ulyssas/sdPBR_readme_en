@@ -16,11 +16,15 @@ jobs:
         with:
           ref: ${{ github.event.inputs.commit_id || github.ref }}
 
+      - name: Add Google Search Console verification file
+        run: |
+          echo "google-site-verification: google22bc69af48e97c4f.html" > google22bc69af48e97c4f.html
+
       - name: Generate XML Sitemap
         uses: cicirello/generate-sitemap@v1.10.4
         with:
           base-url-path: https://ulyssas.github.io/sdPBR_readme_en/
-          exclude-paths: /lighting /texture
+          exclude-paths: /lighting /texture /index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
