@@ -20,6 +20,10 @@ jobs:
         run: |
           echo "google-site-verification: google22bc69af48e97c4f.html" > google22bc69af48e97c4f.html
 
+      - name: Patch readme.html (canonical tag)
+        run: |
+          sed -i 's|<head lang="ja">|<head lang="ja"><link rel="canonical" href="https://ulyssas.github.io/sdPBR_readme_en/readme.html" />|' readme.html
+
       - name: Generate XML Sitemap
         uses: cicirello/generate-sitemap@v1.10.4
         with:
