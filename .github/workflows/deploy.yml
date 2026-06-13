@@ -22,13 +22,14 @@ jobs:
 
       - name: Patch readme.html (canonical tag)
         run: |
-          sed -i 's|<head lang="ja">|<head lang="ja"><link rel="canonical" href="https://ulyssas.github.io/sdPBR_readme_en/readme.html" />|' readme.html
+          mv readme.html index.html
+          sed -i 's|<head lang="ja">|<head lang="ja"><link rel="canonical" href="https://ulyssas.github.io/sdPBR_readme_en/" />|' index.html
 
       - name: Generate XML Sitemap
         uses: cicirello/generate-sitemap@v1.10.4
         with:
           base-url-path: https://ulyssas.github.io/sdPBR_readme_en/
-          exclude-paths: /lighting /texture /index.html
+          exclude-paths: /lighting /texture
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
